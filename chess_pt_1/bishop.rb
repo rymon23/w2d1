@@ -8,4 +8,9 @@ class Bishop < Piece
     super(color,board,pos)
     @symbol = :BIS
   end
+
+  def move_dirs
+    diagonal_dirs
+  end
+
 end

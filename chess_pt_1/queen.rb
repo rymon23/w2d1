@@ -8,4 +8,9 @@ class Queen < Piece
     super(color,board,pos)
     @symbol = :QUN
   end
+
+  def move_dirs
+    horizontal_dirs + diagonal_dirs
+  end
+
 end

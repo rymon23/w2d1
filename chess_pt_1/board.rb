@@ -1,10 +1,107 @@
+require_relative "game"
 require_relative "piece"
+require_relative "pawn"
+require_relative "bishop"
+require_relative "king"
+require_relative "knight"
+require_relative "queen"
+require_relative "rook"
+require_relative "null_piece"
+require "byebug"
+
 
 class Board
-  attr_reader :rows
+  attr_reader :rows , :game, :symbol
+
+  COLORS = [:white, :black]
 
   def initialize
-    @rows = Array.new(8) { Array.new(8) }
+    # @game = game
+    @rows = Array.new(8) { Array.new(8, NullPiece.instance) }
+    self.populate_board
+  end
+
+  def populate_board
+    (0..1).each do |i|
+      setup_pieces(COLORS[i])
+    end
+  end
+
+  def setup_pieces(color)
+    if color == :white
+      #player 1
+      self.rows.each_with_index do |row, i|
+        row.each_with_index do |col, j|
+          pos = [i,j]
+          if i == 1
+            self[pos] =Pawn.new(color, self, pos)
+          elsif i == 0 
+            if (j == 0 || j == 7)
+              self[pos] = Rook.new(color, self, pos)
+            elsif (j == 1 || j == 6)
+              self[pos] = Knight.new(color, self, pos)
+            elsif (j == 2 || j == 5)
+              self[pos] = Bishop.new(color, self, pos)
+            elsif (j == 3)
+              self[pos] = King.new(color, self, pos)
+            elsif (j == 4)
+              self[pos] = Queen.new(color, self, pos)
+            end
+          # else
+          #   self[pos] = NullPiece.instance
+          end
+        end
+      end
+
+    else
+      #player 2
+
+      self.rows.each_with_index do |row, i|
+        row.each_with_index do |col, j|
+          pos = [i,j]
+          if i == 6
+            self[pos] =Pawn.new(color, self, pos)
+          elsif i == 7 
+            if (j == 0 || j == 7)
+              self[pos] = Rook.new(color, self, pos)
+            elsif (j == 1 || j == 6)
+              self[pos] = Knight.new(color, self, pos)
+            elsif (j == 2 || j == 5)
+              self[pos] = Bishop.new(color, self, pos)
+            elsif (j == 4)
+              self[pos] = King.new(color, self, pos)
+            elsif (j == 3)
+              self[pos] = Queen.new(color, self, pos)
+            end
+          # else
+          #   self[pos] = NullPiece.instance
+          end
+        end
+      end
+    end
+    nil
+  end
+
+  def print_board
+    # border_col = ""
+    # self.rows[0].each do |col|
+    #   border_col += "______"
+    # end
+    # puts border_col
+
+    self.rows.each do |row|
+      disp_row = ""
+      row.each do |col|
+        if col.nil?
+          disp_row += "  "
+        else
+          disp_row += "  #{col.symbol}  "
+        end
+      end
+      puts 
+      puts disp_row
+    end
+
   end
 
   def [](pos)
@@ -13,7 +110,7 @@ class Board
   end
 
   def []=(pos, val)
-    return unless valid_pos?(pos)
+    # return unless valid_pos?(pos)
     row,col = pos
     @rows[row][col] = val
   end
@@ -65,3 +162,6 @@ class Board
   end
 
 end
+
+b= Board.new
+b.print_board

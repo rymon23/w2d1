@@ -7,5 +7,10 @@ class Rook < Piece
   def initialize(color,board,pos)
     super(color,board,pos)
     @symbol = :ROK
-  end  
+  end
+
+  def move_dirs
+    horizontal_dirs
+  end
+
 end

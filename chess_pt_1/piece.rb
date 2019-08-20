@@ -1,3 +1,4 @@
+require "byebug"
 class Piece
   attr_reader :color,:board,:pos,:symbol
 
@@ -21,8 +22,8 @@ class Piece
   def pos=(val)
   end
 
-  def symbol
-  end
+  # def symbol
+  # end
 
   private
   def move_into_check?(end_pos)
